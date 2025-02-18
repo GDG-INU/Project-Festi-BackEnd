@@ -1,0 +1,63 @@
+# ========== IntelliJ 관련 ==========
+.idea/
+*.iml
+out/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/contentModel.xml
+.idea/**/sonarlint/
+.idea/**/markdown-navigator.xml
+.idea/**/markdown-navigator-enh.xml
+.idea/**/markdown-navigator/
+.idea/httpRequests/
+.idea/caches/build_file_checksums.ser
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# ========== Gradle 관련 ==========
+.gradle
+.gradle/
+**/build/
+.gradle-task-name-cache
+
+# Gradle Wrapper
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# ========== Java 관련 ==========
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual Machine Crash Logs
+hs_err_pid*
+replay_pid*
+
+# Java Heap Dumps
+*.hprof
+
+# Package Files
+*.apk
+*.dex
+
+# ========== Eclipse 관련 ==========
+.project
+.classpath
+.csettings
+.settings/
