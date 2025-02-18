@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57fea952-99d9-4485-a5ae-1e0aa8a503b0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/festi/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/reports/problems/problems-report.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/festi/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/festi/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/festi/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/resources/main/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
