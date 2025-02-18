@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kakao Login</title>
+</head>
+<body>
+<h1>Login with Kakao</h1>
+
+<!-- 카카오 로그인 버튼 -->
+<button id="kakao-login-btn">Login with Kakao</button>
+
+<script>
+    // 카카오 REST API 키
+    const REST_API_KEY = '0e9c4f7b52ccaf36a3f6e27337b6b10d';
+
+    // 카카오에서 등록한 리디렉트 URI
+    const REDIRECT_URI = 'http://localhost:8080/user/loginTestPage';
+
+    // 로그인 버튼 클릭 시 카카오 로그인 페이지로 리다이렉트
+    document.getElementById('kakao-login-btn').addEventListener('click', function () {
+        const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize` +
+            `?response_type=code` +
+            `&client_id=${REST_API_KEY}` +
+            `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+
+        // 카카오 로그인 페이지로 이동
+        window.location.href = kakaoAuthUrl;
+    });
+</script>
+</body>
+</html>
