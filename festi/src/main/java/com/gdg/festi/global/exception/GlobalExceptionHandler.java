@@ -1,6 +1,6 @@
-package MathCaptain.weakness.global.exception;
+package com.gdg.festi.global.exception;
 
-import MathCaptain.weakness.global.Api.ApiResponse;
+import com.gdg.festi.global.Api.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,21 +21,26 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        return ResponseEntity.badRequest().body(ApiResponse.fail("Validation failed", errors));
+        return ResponseEntity.badRequest().body(ApiResponse.fail(403, "Validation failed", errors));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return ResponseEntity.status(404).body(ApiResponse.fail(ex.getMessage(), null));
+        return ResponseEntity.status(503).body(ApiResponse.fail(503, ex.getMessage(), null));
     }
 
     @ExceptionHandler(DuplicatedException.class)
     public ResponseEntity<ApiResponse<String>> handleDuplicatedException(DuplicatedException ex) {
-        return ResponseEntity.badRequest().body(ApiResponse.fail(ex.getMessage(), null));
+        return ResponseEntity.status(400).body(ApiResponse.fail(400, ex.getMessage(), null));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body(ApiResponse.fail(ex.getMessage(), null));
+        return ResponseEntity.status(400).body(ApiResponse.fail(400, ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<String>> handleNullPointerException(NullPointerException ex) {
+        return ResponseEntity.status(400).body(ApiResponse.fail(400, ex.getMessage(), null));
     }
 }

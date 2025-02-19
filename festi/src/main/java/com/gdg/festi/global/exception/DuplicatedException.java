@@ -1,4 +1,4 @@
-package MathCaptain.weakness.global.exception;
+package com.gdg.festi.global.exception;
 
 public class DuplicatedException extends RuntimeException {
     public DuplicatedException(String message) {
