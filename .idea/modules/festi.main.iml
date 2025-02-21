@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="festi:main" external.linked.project.path="$MODULE_DIR$/../../festi" external.root.project.path="$MODULE_DIR$/../../festi" external.system.id="GRADLE" external.system.module.group="com.gdg" external.system.module.type="sourceSet" external.system.module.version="0.0.1-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet external-system-id="GRADLE" type="web" name="Web">
+      <configuration>
+        <webroots />
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/../../festi/src/main/java" />
+          <root url="file://$MODULE_DIR$/../../festi/src/main/resources" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
     <output url="file://$MODULE_DIR$/../../festi/build/classes/java/main" />
     <exclude-output />
@@ -10,7 +21,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../festi/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../festi/src/main/resources" type="java-resource" />
     </content>
-    <orderEntry type="jdk" jdkName="corretto-17" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.18.36" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:3.4.2" level="project" />
@@ -18,6 +29,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-thymeleaf:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:3.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.orm:hibernate-core:6.6.5.Final" level="project" />
