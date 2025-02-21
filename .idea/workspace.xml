@@ -5,8 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57fea952-99d9-4485-a5ae-1e0aa8a503b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Controller/MatchController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Domain/Match_Info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Domain/Match_Result.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Dto/request/MatchInfoEnrollRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Dto/request/MatchInfoUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Dto/response/MatchInfoListRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Dto/response/MatchInfoResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Enums/Drink.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Enums/Gender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Enums/Mood.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Enums/Status.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Repository/MatchInfoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Repository/MatchResultRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Service/MatchService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Service/MatchingLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/Match/Service/MatchingScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global/Api/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global/Api/ApiResponseMessages.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global/exception/DuplicatedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/festi.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/festi.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/festi.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/festi.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/resources/main/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/tmp/compileJava/compileTransaction/stash-dir/AppConfig.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/tmp/compileJava/compileTransaction/stash-dir/KakaoLoginController.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/festi/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/FestiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/FestiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/festi/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/festi/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,28 +70,73 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "JayongLee"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/GDG-INU/Project-Festi-BackEnd",
+    "accountId": "807be038-8a85-4d32-8937-0d6f57a6fd4a"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2tDAemDyyiOfP8fanUrfTQ8nW5x" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.festi [:com.gdg.festi.FestiApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.FestiApplication.executor": "Run",
+    "Gradle.Build festi.executor": "Run",
+    "Gradle.festi [:com.gdg.festi.FestiApplication.main()].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.FestiApplication.executor": "Run",
+    "git-widget-placeholder": "jeyong",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/jayong/Programming/GDG/INU_FESTI/festi/src/main/java/com/gdg/festi/global",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/festi/src/main/java/com/gdg/festi/global" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.FestiApplication">
     <configuration name="FestiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.gdg.festi.FestiApplication" />
       <module name="festi.main" />
@@ -73,11 +150,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="FestiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="festi.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.gdg.festi.FestiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.FestiApplication" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -87,7 +180,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739876371050</updated>
+      <workItem from="1739887521546" duration="19334000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
