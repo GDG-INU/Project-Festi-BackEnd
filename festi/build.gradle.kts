@@ -39,7 +39,11 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+	implementation("com.google.code.gson:gson:2.10.1")
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")   // API 모듈
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")  // 구현체
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JSON 처리 (Spring Boot 3+에서 필요)
+	implementation("org.springframework.boot:spring-boot-starter-security")}
 
 tasks.withType<Test> {
 	useJUnitPlatform()
