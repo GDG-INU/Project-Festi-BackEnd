@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Service;
+package com.gdg.festi.Match.Config;
 
 import com.gdg.festi.Match.Repository.MatchInfoRepository;
 import com.gdg.festi.Match.Repository.MatchResultRepository;

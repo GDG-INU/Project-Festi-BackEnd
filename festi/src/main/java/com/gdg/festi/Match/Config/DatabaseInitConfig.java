@@ -1,6 +1,5 @@
-package com.gdg.festi.Match;
+package com.gdg.festi.Match.Config;
 
-import com.gdg.festi.Match.Service.DatabaseInit;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
