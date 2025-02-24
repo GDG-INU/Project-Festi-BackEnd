@@ -46,9 +46,9 @@ public class MatchService {
             return ApiResponse.fail(500, "이미 매칭을 신청한 내역이 있어요", null);
         }
 
-        matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest));
+        Long matchId = matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest)).getMatchInfoId();
 
-        return ApiResponse.ok(ApiResponseMessages.ENROLL_STATUS, "매칭 정보 등록 성공");
+        return ApiResponse.ok(ApiResponseMessages.ENROLL_STATUS, matchId);
     }
 
     // 매칭 등록 내역 조회
