@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class MatchInfoUpdateRequest {
 
-    private Long userId;
-
     private String groupName;
 
     private String groupInfo;

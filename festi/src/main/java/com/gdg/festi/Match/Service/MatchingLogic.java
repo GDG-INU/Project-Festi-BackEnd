@@ -9,6 +9,7 @@ import com.gdg.festi.Match.Repository.MatchResultRepository;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -27,12 +28,13 @@ public class MatchingLogic {
 
     private static final int FAILED = -1000;
 
-
+    @Transactional
     public void match(LocalDate localDate) {
 
         // 같은 날 매칭을 원하는 매칭 정보 불러오기
         List<MatchInfo> matchInfoList = sameDateMatchInfoList(localDate);
 
+        // 매칭Id가 작은쪽이 왼쪽에 위치하도록 Pair(쌍) 생성
         TreeMap<Pair<Long, Long>, Integer> matchScore = new TreeMap<>((pair1, pair2) -> {
             int firstComparison = pair1.getLeft().compareTo(pair2.getLeft());
             return (firstComparison != 0) ? firstComparison : pair1.getRight().compareTo(pair2.getRight());
@@ -53,7 +55,6 @@ public class MatchingLogic {
                         Math.max(matchInfo1.getMatchInfoId(), matchInfo2.getMatchInfoId())
                 );
 
-                List<Long> InfoResult = List.of(matchInfo1.getMatchInfoId(), matchInfo2.getMatchInfoId());
                 int score = startTimeScore(matchInfo1.getStartTime(), matchInfo2.getStartTime()) +
                         peopleScore(matchInfo1.getPeople(), matchInfo2.getPeople()) +
                         drinkScore(matchInfo1.getDrink(), matchInfo2.getDrink()) +
@@ -78,9 +79,15 @@ public class MatchingLogic {
                 continue;
             }
 
+            MatchInfo matchInfo1 = matchInfoRepository.findById(match_info_id_1)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
+
+            MatchInfo matchInfo2 = matchInfoRepository.findById(match_info_id_2)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
+
             matchResultRepository.save(MatchResult.builder()
-                    .matchInfoId1(match_info_id_1)
-                    .matchInfoId2(match_info_id_2)
+                    .matchInfo1(matchInfo1)
+                    .matchInfo2(matchInfo2)
                     .build());
 
             matchedId.add(match_info_id_1);
@@ -183,7 +190,7 @@ public class MatchingLogic {
     }
 
     private boolean isSameMatchInfo(MatchInfo matchInfo1, MatchInfo matchInfo2) {
-        return matchInfo1.getUserId().equals(matchInfo2.getUserId());
+        return matchInfo1.getUser().equals(matchInfo2.getUser());
     }
 
     private boolean checkGender(MatchInfo matchInfo1, MatchInfo matchInfo2) {
