@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -19,10 +20,11 @@ public class JWTUtil {
     private final long expirationTime = 1000 * 60 * 60 * 24; // 24시간
 
     public JWTUtil(@Value("${jwt.secret}") String secretKey) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey); // ✅ Base64 디코딩 후 키 생성
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // JWT 생성 (로그인 시 발급)
+    // JWT 생성
     public String generateToken(String kakaoId) {
         return Jwts.builder()
                 .setSubject(kakaoId)
@@ -32,7 +34,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    // JWT 검증 (토큰 유효성 체크)
+    // JWT 검증
     public String validateToken(String token) {
         try {
             return Jwts.parserBuilder()
@@ -41,10 +43,8 @@ public class JWTUtil {
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
-        } catch (ExpiredJwtException e) {
-            throw new JwtException("만료된 토큰입니다.");
-        } catch (JwtException e) {
-            throw new JwtException("유효하지 않은 토큰입니다.");
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
         }
     }
 }

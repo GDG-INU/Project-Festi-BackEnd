@@ -23,9 +23,13 @@ public class User {
     @Column(nullable = true)
     private String nickname;
 
-    public User(String kakaoId, String nickname) {
+    @Column(name = "kakao_access_token", nullable = true)
+    private String kakaoAccessToken;
+
+    public User(String kakaoId, String nickname, String kakaoAccessToken) {
         this.kakaoId = kakaoId;
         this.nickname = nickname;
+        this.kakaoAccessToken = kakaoAccessToken;
     }
 
 }

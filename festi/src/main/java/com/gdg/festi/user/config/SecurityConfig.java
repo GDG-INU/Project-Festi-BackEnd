@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/", "/login").permitAll();
                     auth.requestMatchers("/user/login").permitAll(); // 로그인은 인증 없이 가능
+                    auth.requestMatchers("/api/auth/login").permitAll();
                     auth.anyRequest().authenticated(); // 나머지는 인증 필요
                 })
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
