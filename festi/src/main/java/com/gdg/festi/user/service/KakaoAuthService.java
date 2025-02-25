@@ -1,8 +1,11 @@
 package com.gdg.festi.user.service;
 
+import com.gdg.festi.user.entity.User;
+import com.gdg.festi.user.repository.UserRepository;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -11,11 +14,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.rmi.AccessException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KakaoAuthService {
 
     @Value("${kakao.client-id}")
@@ -26,10 +32,10 @@ public class KakaoAuthService {
 
     private final String KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/token";
     private final String KAKAO_USER_INFO_URL = "https://kapi.kakao.com/v2/user/me";
-    private final String KAKAO_LOGOUT_URL = "https://kapi.kakao.com/v1/user/logout";
-    private final String KAKAO_UNLINK_URL = "https://kapi.kakao.com/v1/user/unlink";
 
     private final RestTemplate restTemplate = new RestTemplate();
+
+    private final UserRepository userRepository;
 
     // 카카오에서 액세스 토큰 가져오기
     public String getAccessToken(String code) {
@@ -46,7 +52,9 @@ public class KakaoAuthService {
         ResponseEntity<String> response = restTemplate.exchange(KAKAO_AUTH_URL, HttpMethod.POST, request, String.class);
 
         JsonElement element = JsonParser.parseString(response.getBody());
-        return element.getAsJsonObject().get("access_token").getAsString();
+        String accessToken = element.getAsJsonObject().get("access_token").getAsString();
+
+        return accessToken;
     }
 
     public Map<String, String> getUserInfo(String accessToken) {
@@ -57,14 +65,12 @@ public class KakaoAuthService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(KAKAO_USER_INFO_URL, HttpMethod.POST, entity, String.class);
 
-        // 응답 출력 (디버깅 용도)
-        log.info("카카오 API 응답: {}", response.getBody());
-
         JsonElement element = JsonParser.parseString(response.getBody());
         JsonObject responseObject = element.getAsJsonObject();
 
         // "id"가 있는지 확인
         String id = responseObject.has("id") ? responseObject.get("id").getAsString() : null;
+
         if (id == null) {
             throw new RuntimeException("카카오 API 응답에서 ID를 찾을 수 없음");
         }
@@ -79,13 +85,4 @@ public class KakaoAuthService {
 
         return userInfo;
     }
-
-    // 카카오 로그아웃
-    public void kakaoLogout(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        restTemplate.exchange(KAKAO_LOGOUT_URL, HttpMethod.POST, entity, String.class);
-    }
-
 }

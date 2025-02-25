@@ -1,5 +1,7 @@
 package com.gdg.festi.user.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.gdg.festi.user.service.JwtService;
 import com.gdg.festi.user.service.KakaoAuthService;
 import com.gdg.festi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +14,15 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
     private final KakaoAuthService kakaoAuthService;
     private final UserService userService;
+    private final JwtService jwtService;
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> login(@RequestParam String code) {
         // 1. 카카오에서 액세스 토큰 가져오기
         String accessToken = kakaoAuthService.getAccessToken(code);
@@ -29,23 +32,21 @@ public class UserController {
         Map<String, String> userInfo = kakaoAuthService.getUserInfo(accessToken);
         log.info("카카오 액세스 토큰: {}", accessToken);
 
-
         // 3. JWT 발급 및 반환
-        String jwtToken = userService.loginWithKakao(userInfo.get("id"), userInfo.get("nickname"));
+        String jwtToken = userService.loginWithKakao(userInfo.get("id"), userInfo.get("nickname"), accessToken);
         log.info("발급된 JWT: {}", jwtToken);
 
         return ResponseEntity.ok(jwtToken);
-
     }
 
-    @PatchMapping("/nickname")
-    public ResponseEntity<String> updateNickname(@RequestBody Map<String, String> requestData) {
-        String kakaoId = requestData.get("kakaoId");
-        String newNickname = requestData.get("newNickname");
+    @PatchMapping("/user/nickname")
+    public ResponseEntity<String> updateNickname(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody Map<String, String> requestData) {
 
-        if (kakaoId == null || newNickname == null) {
-            return ResponseEntity.badRequest().body("필수 값이 없습니다.");
-        }
+        String kakaoId = jwtService.getUserIdFromToken(jwtToken.replace("Bearer ", ""));
+        System.out.println(kakaoId);
+        String newNickname = requestData.get("newNickname");
 
         boolean isUpdated = userService.updateNickname(kakaoId, newNickname);
         if (isUpdated) {
@@ -55,9 +56,13 @@ public class UserController {
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String accessToken) {
-        kakaoAuthService.kakaoLogout(accessToken.replace("Bearer ", ""));
+    @PostMapping("/auth/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String jwtToken) {
+
+        // JWT에서 kakaoId를 가져옴
+        String kakaoId = jwtService.getUserIdFromToken(jwtToken.replace("Bearer ", ""));
+
+        userService.logoutWithKakao(kakaoId);
         return ResponseEntity.ok("로그아웃 성공");
     }
 }
