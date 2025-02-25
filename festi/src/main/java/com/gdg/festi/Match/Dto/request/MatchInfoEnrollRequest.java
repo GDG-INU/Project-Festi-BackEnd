@@ -15,9 +15,6 @@ import java.time.LocalDateTime;
 public class MatchInfoEnrollRequest {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private String groupName;
 
     @NotNull

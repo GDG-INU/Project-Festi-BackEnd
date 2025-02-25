@@ -5,8 +5,10 @@ import com.gdg.festi.Match.Dto.request.MatchInfoUpdateRequest;
 import com.gdg.festi.Match.Dto.response.MatchInfoResponse;
 import com.gdg.festi.Match.Service.MatchService;
 import com.gdg.festi.global.Api.ApiResponse;
+import com.gdg.festi.global.annotation.LoginUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,15 +21,15 @@ public class MatchController {
     private final MatchService matchService;
 
     // 매칭 등록 내역 조회
-    @GetMapping("/match/{userId}/{day}")
-    public ApiResponse<MatchInfoResponse> getMatch(@PathVariable Long userId, @PathVariable String day) {
-        return matchService.getMatchInfo(userId, LocalDate.parse(day));
+    @GetMapping("/match/{day}")
+    public ApiResponse<MatchInfoResponse> getMatch(@LoginUser UserDetails userDetails, @PathVariable String day) {
+        return matchService.getMatchInfo(userDetails, LocalDate.parse(day));
     }
 
     // 매칭 정보 등록
     @PostMapping("/match")
-    public ApiResponse<?> postMatch(@RequestBody MatchInfoEnrollRequest matchInfoEnrollRequest) {
-        return matchService.enrollMatchInfo(matchInfoEnrollRequest);
+    public ApiResponse<?> postMatch(@LoginUser UserDetails userDetails, @RequestBody MatchInfoEnrollRequest matchInfoEnrollRequest) {
+        return matchService.enrollMatchInfo(userDetails, matchInfoEnrollRequest);
     }
 
     // 매칭 등록 내역 수정
@@ -43,8 +45,8 @@ public class MatchController {
     }
 
     // 매칭 결과 조회
-    @GetMapping("/match/result/{userId}/{day}")
-    public ApiResponse<MatchInfoResponse> getMatchResult(@PathVariable Long userId, @PathVariable String day) {
-        return matchService.getMatchResult(userId, LocalDate.parse(day));
+    @GetMapping("/match/result/{day}")
+    public ApiResponse<MatchInfoResponse> getMatchResult(@LoginUser UserDetails userDetails, @PathVariable String day) {
+        return matchService.getMatchResult(userDetails, LocalDate.parse(day));
     }
 }

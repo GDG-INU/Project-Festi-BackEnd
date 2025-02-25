@@ -10,9 +10,12 @@ import com.gdg.festi.Match.Repository.MatchResultRepository;
 import com.gdg.festi.global.Api.ApiResponse;
 import com.gdg.festi.global.Api.ApiResponseMessages;
 import com.gdg.festi.global.exception.ResourceNotFoundException;
+import com.gdg.festi.user.entity.User;
+import com.gdg.festi.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,27 +35,28 @@ public class MatchService {
 
     private final MatchResultRepository matchInfoEnrollRepository;
 
-    // 매칭 정보 등록
-    public ApiResponse<?> enrollMatchInfo(MatchInfoEnrollRequest matchInfoEnrollRequest){
+    private final UserRepository userRepository;
 
-        if (isEnrolled(matchInfoEnrollRequest.getUserId(), matchInfoEnrollRequest.getMatchDate())) {
+    // 매칭 정보 등록
+    public ApiResponse<?> enrollMatchInfo(UserDetails userDetails, MatchInfoEnrollRequest matchInfoEnrollRequest){
+
+        User user = getLoginUser(userDetails);
+
+        if (isEnrolled(user, matchInfoEnrollRequest.getMatchDate())) {
             return ApiResponse.fail(500, "이미 매칭을 신청한 내역이 있어요", null);
         }
 
-        MatchInfo matchInfo = buildMatchInfo(matchInfoEnrollRequest);
+        Long matchId = matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest)).getMatchInfoId();
 
-        matchInfoRepository.save(matchInfo);
-
-        return ApiResponse.ok(ApiResponseMessages.ENROLL_STATUS, "매칭 정보 등록 성공");
+        return ApiResponse.ok(ApiResponseMessages.ENROLL_STATUS, matchId);
     }
 
     // 매칭 등록 내역 조회
-    public ApiResponse<MatchInfoResponse> getMatchInfo(Long user_id, LocalDate match_date){
+    public ApiResponse<MatchInfoResponse> getMatchInfo(UserDetails userDetails, LocalDate match_date){
 
-        log.info("user_id : {}", user_id);
-        log.info("date : {}", match_date);
+        User loginUser = getLoginUser(userDetails);
 
-        MatchInfo matchInfo = matchInfoRepository.findByUserIdAndMatchDate(user_id, match_date)
+        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
                 .orElseThrow(() -> new IllegalArgumentException("매칭 등록 내역이 없어요."));
 
         return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, buildMatchInfoResponse(matchInfo));
@@ -80,13 +84,15 @@ public class MatchService {
         return ApiResponse.ok(ApiResponseMessages.CANCEL_STATUS, "매칭 요청 취소 성공");
     }
 
-    public ApiResponse<MatchInfoResponse> getMatchResult(Long user_id, LocalDate match_date) {
-        MatchInfo otherMatchInfo = matchResultRepository.findMatchedInfo(user_id, match_date)
+    public ApiResponse<MatchInfoResponse> getMatchResult(UserDetails userDetails, LocalDate match_date) {
+
+        User user = getLoginUser(userDetails);
+
+        MatchInfo otherMatchInfo = matchResultRepository.findMatchedInfo(user, match_date)
                 .orElseThrow(() -> new ResourceNotFoundException("매칭 결과가 나오지 않았어요."));
 
         return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, buildMatchInfoResponse(otherMatchInfo));
     }
-
 
     /// 비즈니스 로직
 
@@ -141,16 +147,21 @@ public class MatchService {
 
     }
 
-    private boolean isEnrolled(Long userId, LocalDate matchDate) {
-        return matchInfoRepository.existsByUserIdAndMatchDate(userId, matchDate);
+    private boolean isEnrolled(User user, LocalDate matchDate) {
+        return matchInfoRepository.existsByUserAndMatchDate(user, matchDate);
     }
 
+    private User getLoginUser(UserDetails userDetails) {
+        return userRepository.findByKakaoId(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("해당 유저가 존재하지 않습니다."));
+    }
 
     /// 빌더
     // 매칭 생성 빌더
-    private MatchInfo buildMatchInfo(MatchInfoEnrollRequest matchInfoEnrollRequest) {
+    private MatchInfo buildMatchInfo(User user, MatchInfoEnrollRequest matchInfoEnrollRequest) {
+
         return MatchInfo.builder()
-                .userId(matchInfoEnrollRequest.getUserId())
+                .user(user)
                 .groupName(matchInfoEnrollRequest.getGroupName())
                 .groupInfo(matchInfoEnrollRequest.getGroupInfo())
                 .people(matchInfoEnrollRequest.getPeople())

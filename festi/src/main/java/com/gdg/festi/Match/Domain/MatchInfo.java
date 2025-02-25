@@ -4,6 +4,7 @@ import com.gdg.festi.Match.Enums.Drink;
 import com.gdg.festi.Match.Enums.Gender;
 import com.gdg.festi.Match.Enums.Mood;
 import com.gdg.festi.Match.Enums.Status;
+import com.gdg.festi.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,8 @@ public class MatchInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long matchInfoId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     private String groupName;
 
@@ -112,6 +113,5 @@ public class MatchInfo {
     public void updateModifiedAt(LocalDateTime modified_at) {
         this.modifiedAt = modified_at;
     }
-
 
 }
