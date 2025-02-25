@@ -6,6 +6,9 @@ import com.gdg.festi.user.entity.User;
 import com.gdg.festi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -81,6 +84,23 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+
+    // userName 정보 가져오기
+    public String getCurrentKakaoId() {
+        // 현재 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증 정보가 없거나 익명 사용자일 경우 예외 발생
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication.getPrincipal().equals("anonymousUser")) {
+            throw new RuntimeException("인증되지 않은 사용자입니다.");
+        }
+
+        // UserDetails에서 kakaoID 추출
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userDetails.getUsername();
     }
 
 }
