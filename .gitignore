@@ -62,3 +62,8 @@ replay_pid*
 .classpath
 .csettings
 .settings/
+
+# ========== Docker 관련 ==========
+.Dockerfile
+.dockerignore
+Dockerfile
