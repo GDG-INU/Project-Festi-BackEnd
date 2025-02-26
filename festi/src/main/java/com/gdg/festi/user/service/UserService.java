@@ -2,9 +2,11 @@ package com.gdg.festi.user.service;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.gdg.festi.user.config.JWTUtil;
+import com.gdg.festi.user.dto.response.KakaoLoginResponse;
 import com.gdg.festi.user.entity.User;
 import com.gdg.festi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -27,23 +30,29 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public String loginWithKakao(String kakaoId, String nickname, String kakaoAccessToken) {
+    public KakaoLoginResponse loginWithKakao(String kakaoId, String nickname, String kakaoAccessToken) {
         // 1. 기존 회원 찾기
         Optional<User> userOptional = userRepository.findByKakaoId(kakaoId);
-
+        boolean isNewUser;
         User user;
+
         if (userOptional.isPresent()) {
             user = userOptional.get();
             user.setKakaoAccessToken(kakaoAccessToken);
+            isNewUser = false;
+
         } else {
             // 2. 신규 유저면 저장
             user = new User(kakaoId, nickname, kakaoAccessToken);
+            isNewUser = true;
         }
 
         userRepository.save(user);
 
-        // 3. JWT 토큰 발급
-        return jwtUtil.generateToken(user.getKakaoId());
+        // jwt 토큰 발급
+        String jwtToken = jwtUtil.generateToken(user.getKakaoId());
+
+        return new KakaoLoginResponse(jwtToken, isNewUser);
     }
 
     public void logoutWithKakao(String kakaoId){

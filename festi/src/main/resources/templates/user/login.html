@@ -27,17 +27,38 @@
         window.location.href = kakaoAuthUrl; // 카카오 로그인 페이지로 이동
     }
 
-    // 2. 로그인 후 JWT 저장
     async function handleLoginCallback() {
         const params = new URLSearchParams(window.location.search);
+
         if (params.has('code')) {
             const code = params.get('code');
-            const response = await fetch(`${backendUrl}/api/auth/login?code=${code}`, {
-                method: "POST",
-            });
-            const token = await response.text();
-            localStorage.setItem("jwtToken", token);
-            document.getElementById("result").innerText = "로그인 성공! JWT 저장됨";
+
+            try {
+                const response = await fetch(`${backendUrl}/api/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code })
+                });
+
+                console.log("서버 응답 상태 코드:", response.status);
+
+                // ❗ 응답이 정상(200 OK)인지 확인
+                if (!response.ok) {
+                    throw new Error(`서버 응답 오류: ${response.status}`);
+                }
+
+                // ✅ JSON 변환 처리
+                const data = await response.json();
+                console.log("서버 응답 데이터:", data);
+
+                // ✅ JWT 저장 및 UI 업데이트
+                localStorage.setItem("jwtToken", data.jwtToken);
+                document.getElementById("result").innerText = `로그인 성공! 신규 유저 여부: ${data.isNewUser}`;
+
+            } catch (error) {
+                console.error("로그인 요청 중 오류 발생:", error);
+                document.getElementById("result").innerText = `로그인 실패: ${error.message}`;
+            }
         }
     }
 
@@ -56,26 +77,16 @@
         document.getElementById("result").innerText = JSON.stringify(data, null, 2);
     }
 
-    // 4. 닉네임 변경
     async function changeNickname() {
         console.log("닉네임 변경 함수 실행됨");
 
         const token = localStorage.getItem("jwtToken");
         if (!token) {
             alert("로그인이 필요합니다.");
-            console.log("JWT 없음");
-            return;
-        }
-
-        const kakaoId = getKakaoIdFromToken(); // JWT에서 kakaoId 추출
-        if (!kakaoId) {
-            alert("사용자 정보를 가져올 수 없습니다.");
-            console.log("kakaoId 없음");
             return;
         }
 
         const newNickname = document.getElementById("newNickname").value;
-        console.log("보낼 데이터:", { kakaoId, newNickname });
 
         try {
             const response = await fetch(`${backendUrl}/api/user/nickname`, {
@@ -84,48 +95,37 @@
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ kakaoId, newNickname })
+                body: JSON.stringify({ newNickname }) // ✅ 수정된 요청
             });
 
-            console.log("응답 상태 코드:", response.status);
-            const result = await response.text();
-            console.log("서버 응답:", result);
-
-            if (response.ok) {
-                document.getElementById("result").innerText = "닉네임 변경 완료!";
-            } else {
-                document.getElementById("result").innerText = "닉네임 변경 실패!";
-            }
+            const result = await response.json();
+            document.getElementById("result").innerText = result.message;
         } catch (error) {
             console.error("닉네임 변경 요청 중 오류 발생:", error);
         }
     }
 
 
-
     function logout() {
-    const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("jwtToken");
 
         if (!token) {
             alert("이미 로그아웃되었습니다.");
             return;
         }
 
-        // ✅ 백엔드에서 서비스 로그아웃 실행
         fetch(`${backendUrl}/api/auth/logout`, {
             method: "POST",
             headers: { "Authorization": `Bearer ${token}` }
-        }).then(response => {
-            if (response.ok) {
-                localStorage.removeItem("jwtToken"); // ✅ JWT 삭제
-                document.getElementById("result").innerText = "로그아웃 완료!";
+        }).then(response => response.json())
+          .then(result => {
+              localStorage.removeItem("jwtToken");
+              document.getElementById("result").innerText = result.message;
 
-                // ✅ 카카오 계정까지 로그아웃 (로그인 화면으로 이동)
-                window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=0e9c4f7b52ccaf36a3f6e27337b6b10d&logout_redirect_uri=http://localhost:8080/user/login`;
-            } else {
-                document.getElementById("result").innerText = "로그아웃 실패!";
-            }
-        }).catch(error => console.error("로그아웃 요청 중 오류 발생:", error));
+              // ✅ 카카오 로그아웃 처리
+              window.location.href = `https://kauth.kakao.com/oauth/logout?client_id=0e9c4f7b52ccaf36a3f6e27337b6b10d&logout_redirect_uri=http://localhost:8080/user/login`;
+          })
+          .catch(error => console.error("로그아웃 요청 중 오류 발생:", error));
     }
 
     // JWT를 디코딩하는 함수
