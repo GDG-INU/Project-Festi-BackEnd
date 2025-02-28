@@ -181,9 +181,7 @@ public class PolaroidService {
     public ApiResponse<?> searchMy() {
         // 사용자 정보 받아오기
         String kakaoId = userService.getCurrentKakaoId();
-        log.info("kakaoId : " + kakaoId);
         Optional<User> userInfo = userRepository.findByKakaoId(kakaoId);
-        log.info("userInfo : " + userInfo.get().getKakaoId());
 
         // 사용자 정보 기준으로 폴라로이드 정보 조회
         List<Polaroid> polaroids = polaroidRepository.findByUser(userInfo.orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")));
