@@ -43,7 +43,7 @@ public class UserService {
 
         } else {
             // 2. 신규 유저면 저장
-            user = new User(kakaoId, nickname, kakaoAccessToken);
+            user = new User(kakaoId, "사용자", kakaoAccessToken);
             isNewUser = true;
         }
 
@@ -57,8 +57,9 @@ public class UserService {
 
     public void logoutWithKakao(String kakaoId){
 
-        Optional<User> userOptional = userRepository.findByKakaoId(kakaoId);
-        User user = userOptional.get();
+        User user = userRepository.findByKakaoId(kakaoId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
         String kakaoAccessToken = user.getKakaoAccessToken();
 
         HttpHeaders headers = new HttpHeaders();
@@ -85,6 +86,7 @@ public class UserService {
     // 닉네임 변경
     @Transactional
     public boolean updateNickname(String kakaoId, String newNickname) {
+
         Optional<User> userOptional = userRepository.findByKakaoId(kakaoId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -111,5 +113,26 @@ public class UserService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return userDetails.getUsername();
     }
+
+
+    public String getUserNickname(String kakaoId) {
+        Optional<User> userOptional = userRepository.findByKakaoId(kakaoId);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            return user.getNickname();
+        }
+
+        return null;
+    }
+
+    // 닉네임 중복 체크
+    public boolean isNicknameAvailable(String nickname) {
+
+        return !userRepository.existsByNickname(nickname);
+    }
+
+
 
 }
