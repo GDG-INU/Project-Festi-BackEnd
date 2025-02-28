@@ -36,4 +36,13 @@ public class JwtService {
         }
     }
 
+    public String extractBearerToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7); // "Bearer " 이후의 값 반환
+        }
+        return authorizationHeader; // Bearer가 없으면 원래 값 그대로 반환
+    }
+
+
+
 }
