@@ -1,5 +1,6 @@
 package com.gdg.festi.Match.Domain;
 
+import com.gdg.festi.Match.Dto.request.MatchInfoUpdateRequest;
 import com.gdg.festi.Match.Enums.Drink;
 import com.gdg.festi.Match.Enums.Gender;
 import com.gdg.festi.Match.Enums.Mood;
@@ -112,6 +113,54 @@ public class MatchInfo {
 
     public void updateModifiedAt(LocalDateTime modified_at) {
         this.modifiedAt = modified_at;
+    }
+
+    public void updateMatch(MatchInfoUpdateRequest matchInfoUpdateRequest) {
+        if (!this.groupName.equals(matchInfoUpdateRequest.getGroupName())) {
+            this.updateGroupName(matchInfoUpdateRequest.getGroupName());
+        }
+
+        if (!this.groupInfo.equals(matchInfoUpdateRequest.getGroupInfo())) {
+            this.updateGroupInfo(matchInfoUpdateRequest.getGroupInfo());
+        }
+
+        if (!this.people.equals(matchInfoUpdateRequest.getPeople())) {
+            this.updatePeople(matchInfoUpdateRequest.getPeople());
+        }
+
+        if (!this.matchDate.equals(matchInfoUpdateRequest.getMatchDate())) {
+            this.updateMatchDate(matchInfoUpdateRequest.getMatchDate());
+        }
+
+        if (!this.startTime.equals(matchInfoUpdateRequest.getStartTime())) {
+            this.updateStartTime(matchInfoUpdateRequest.getStartTime());
+        }
+
+        if (!this.gender.equals(matchInfoUpdateRequest.getGender())) {
+            this.updateGender(matchInfoUpdateRequest.getGender());
+        }
+
+        if (!this.desiredGender.equals(matchInfoUpdateRequest.getDesiredGender())) {
+            this.updateDesired_gender(matchInfoUpdateRequest.getDesiredGender());
+        }
+
+        if (!this.drink.equals(matchInfoUpdateRequest.getDrink())) {
+            this.updateDrink(matchInfoUpdateRequest.getDrink());
+        }
+
+        if (!this.mood.equals(matchInfoUpdateRequest.getMood())) {
+            this.updateMood(matchInfoUpdateRequest.getMood());
+        }
+
+        if (!this.contact.equals(matchInfoUpdateRequest.getContact())) {
+            this.updateContact(matchInfoUpdateRequest.getContact());
+        }
+
+        if (!this.groupImg.equals(matchInfoUpdateRequest.getGroupImg())) {
+            this.updateGroupImg(matchInfoUpdateRequest.getGroupImg());
+        }
+
+        this.updateModifiedAt(LocalDateTime.now());
     }
 
 }
