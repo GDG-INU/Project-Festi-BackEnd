@@ -33,15 +33,15 @@ public class MatchController {
     }
 
     // 매칭 등록 내역 수정
-    @PutMapping("/match/{matchId}")
-    public ApiResponse<?> putMatch(@PathVariable Long matchId, @RequestBody MatchInfoUpdateRequest matchInfoUpdateRequest) {
-        return matchService.updateMatchInfo(matchId, matchInfoUpdateRequest);
+    @PutMapping("/match/{day}")
+    public ApiResponse<?> putMatch(@LoginUser UserDetails userDetails, @PathVariable String day, @RequestBody MatchInfoUpdateRequest matchInfoUpdateRequest) {
+        return matchService.updateMatchInfo(userDetails, LocalDate.parse(day), matchInfoUpdateRequest);
     }
 
     // 매칭 등록 취소
-    @DeleteMapping("/match/{matchId}")
-    public ApiResponse<?> cancelMatch(@PathVariable Long matchId) {
-        return matchService.cancelMatchInfo(matchId);
+    @DeleteMapping("/match/{day}")
+    public ApiResponse<?> cancelMatch(@LoginUser UserDetails userDetails, @PathVariable String day) {
+        return matchService.cancelMatchInfo(userDetails, LocalDate.parse(day));
     }
 
     // 매칭 결과 조회

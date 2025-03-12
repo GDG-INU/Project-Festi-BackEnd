@@ -63,9 +63,11 @@ public class MatchService {
     }
 
     // 매칭 정보 수정
-    public ApiResponse<MatchInfoResponse> updateMatchInfo(Long match_info_id, MatchInfoUpdateRequest matchInfoUpdateRequest){
+    public ApiResponse<MatchInfoResponse> updateMatchInfo(UserDetails userDetails, LocalDate match_date, MatchInfoUpdateRequest matchInfoUpdateRequest){
 
-        MatchInfo matchInfo = matchInfoRepository.findById(match_info_id)
+        User loginUser = getLoginUser(userDetails);
+
+        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
                 .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
 
         updateInfo(matchInfo, matchInfoUpdateRequest);
@@ -74,9 +76,11 @@ public class MatchService {
     }
 
     // 매칭 등록 취소
-    public ApiResponse<?> cancelMatchInfo(Long match_info_id){
+    public ApiResponse<?> cancelMatchInfo(UserDetails userDetails, LocalDate match_date){
 
-        MatchInfo matchInfo = matchInfoRepository.findById(match_info_id)
+        User loginUser = getLoginUser(userDetails);
+
+        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
                 .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
 
         matchInfo.updateStatus(Status.CANCELED);
@@ -98,53 +102,7 @@ public class MatchService {
 
     // 매칭 정보 수정
     private void updateInfo(MatchInfo matchInfo, MatchInfoUpdateRequest matchInfoUpdateRequest) {
-
-        if (!matchInfo.getGroupName().equals(matchInfoUpdateRequest.getGroupName())) {
-            matchInfo.updateGroupName(matchInfoUpdateRequest.getGroupName());
-        }
-
-        if (!matchInfo.getGroupInfo().equals(matchInfoUpdateRequest.getGroupInfo())) {
-            matchInfo.updateGroupInfo(matchInfoUpdateRequest.getGroupInfo());
-        }
-
-        if (!matchInfo.getPeople().equals(matchInfoUpdateRequest.getPeople())) {
-            matchInfo.updatePeople(matchInfoUpdateRequest.getPeople());
-        }
-
-        if (!matchInfo.getMatchDate().equals(matchInfoUpdateRequest.getMatchDate())) {
-            matchInfo.updateMatchDate(matchInfoUpdateRequest.getMatchDate());
-        }
-
-        if (!matchInfo.getStartTime().equals(matchInfoUpdateRequest.getStartTime())) {
-            matchInfo.updateStartTime(matchInfoUpdateRequest.getStartTime());
-        }
-
-        if (!matchInfo.getGender().equals(matchInfoUpdateRequest.getGender())) {
-            matchInfo.updateGender(matchInfoUpdateRequest.getGender());
-        }
-
-        if (!matchInfo.getDesiredGender().equals(matchInfoUpdateRequest.getDesiredGender())) {
-            matchInfo.updateDesired_gender(matchInfoUpdateRequest.getDesiredGender());
-        }
-
-        if (!matchInfo.getDrink().equals(matchInfoUpdateRequest.getDrink())) {
-            matchInfo.updateDrink(matchInfoUpdateRequest.getDrink());
-        }
-
-        if (!matchInfo.getMood().equals(matchInfoUpdateRequest.getMood())) {
-            matchInfo.updateMood(matchInfoUpdateRequest.getMood());
-        }
-
-        if (!matchInfo.getContact().equals(matchInfoUpdateRequest.getContact())) {
-            matchInfo.updateContact(matchInfoUpdateRequest.getContact());
-        }
-
-        if (!matchInfo.getGroupImg().equals(matchInfoUpdateRequest.getGroupImg())) {
-            matchInfo.updateGroupImg(matchInfoUpdateRequest.getGroupImg());
-        }
-
-        matchInfo.updateModifiedAt(LocalDateTime.now());
-
+        matchInfo.updateMatch(matchInfoUpdateRequest);
     }
 
     private boolean isEnrolled(User user, LocalDate matchDate) {
