@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateResponseDTO {
     private Long polaroidId;
-    private String kakaoId;
+    private String userId;
     private String imgLink;
 }

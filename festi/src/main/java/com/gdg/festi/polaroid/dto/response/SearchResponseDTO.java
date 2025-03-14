@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SearchResponseDTO {
     private Long polaroidId;
-    private String kakaoId;
+    private String userId;
     private String imgLink;
 }
