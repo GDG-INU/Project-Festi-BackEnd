@@ -14,7 +14,8 @@ public enum SuccessCode {
     SUCCESS_DOWNLOAD(200, "폴라로이드 다운로드되었습니다."),
     SUCCESS_UPDATE(200, "폴라로이드 업데이트되었습니다."),
     SUCCESS_DELETE(200, "폴라로이드가 삭제되었습니다."),
-    NO_CONTENT(200, "검색된 결과가 없습니다.")
+    NO_CONTENT(200, "검색된 결과가 없습니다."),
+    SUCCESS_READ(200, "알림을 확인했습니다.")
     ;
 
     private final Integer code;
