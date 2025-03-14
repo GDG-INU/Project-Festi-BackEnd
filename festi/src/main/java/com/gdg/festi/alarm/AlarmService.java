@@ -42,12 +42,10 @@ public class AlarmService {
             for (Alarm alarm : alarms) {
                 alarmList.add(new SearchResponseDTO(
                         alarm.getAlarmId(),
-                        alarm.getUser().getKakaoId(),
+                        alarm.getUser().getId().toString(),
                         alarm.getAlarmMsg(),
-                        alarm.getSendTime().toString(),
                         alarm.getAlarmType(),
-                        alarm.getIsRead().toString(),
-                        alarm.getLinkPath()
+                        alarm.getIsRead().toString()
                 ));
             }
             return ApiResponse.SUCCESS(SuccessCode.FOUND_IT, alarmList);
@@ -69,13 +67,30 @@ public class AlarmService {
                     .alarmId(alarmInfo.getAlarmId())
                     .alarmMsg(alarmInfo.getAlarmMsg())
                     .alarmType(alarmInfo.getAlarmType())
-                    .sendTime(alarmInfo.getSendTime())
-                    .linkPath(alarmInfo.getLinkPath())
                     .user(alarmInfo.getUser())
                     .isRead(true)
                     .build());
             log.info("알림을 확인했습니다. {}", id);
         }
         return ApiResponse.SUCCESS(SuccessCode.SUCCESS_READ);
+    }
+
+    /**
+     * 알림 등록
+     * @param alarmMsg 알림 내용
+     * @param alarmType 알람 종류
+     */
+    @Transactional
+    public void register(String alarmMsg, String alarmType) {
+        // 사용자 정보 받아오기
+        Optional<User> userInfo = userRepository.findByKakaoId(userService.getCurrentKakaoId());
+
+        alarmRepository.save(Alarm.builder()
+                .alarmMsg(alarmMsg)
+                .alarmType(alarmType)
+                .isRead(false)
+                .user(userInfo.orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")))
+                .build());
+        log.info("알림이 등록되었습니다.");
     }
 }

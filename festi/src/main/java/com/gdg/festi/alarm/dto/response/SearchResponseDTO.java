@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SearchResponseDTO {
     private Long alarmId;
-    private String kakaoId;
+    private String userId;
     private String alarmMsg;
-    private String sendTime;
     private String alarmType;
     private String isRead;
-    private String linkPath;
 }
