@@ -1,8 +1,8 @@
-package com.gdg.festi.Match.Dto.request;
+package com.gdg.festi.match.Dto.request;
 
-import com.gdg.festi.Match.Enums.Drink;
-import com.gdg.festi.Match.Enums.Gender;
-import com.gdg.festi.Match.Enums.Mood;
+import com.gdg.festi.match.Enums.Drink;
+import com.gdg.festi.match.Enums.Gender;
+import com.gdg.festi.match.Enums.Mood;
 import lombok.Builder;
 import lombok.Data;
 

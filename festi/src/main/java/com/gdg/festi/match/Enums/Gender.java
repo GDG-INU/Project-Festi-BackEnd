@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Enums;
+package com.gdg.festi.match.Enums;
 
 public enum Gender {
     FEMALE,

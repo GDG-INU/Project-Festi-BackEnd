@@ -1,7 +1,7 @@
-package com.gdg.festi.Match.Config;
+package com.gdg.festi.match.Config;
 
-import com.gdg.festi.Match.Repository.MatchInfoRepository;
-import com.gdg.festi.Match.Repository.MatchResultRepository;
+import com.gdg.festi.match.Repository.MatchInfoRepository;
+import com.gdg.festi.match.Repository.MatchResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,10 +1,10 @@
-package com.gdg.festi.Match.Domain;
+package com.gdg.festi.match.Domain;
 
-import com.gdg.festi.Match.Dto.request.MatchInfoUpdateRequest;
-import com.gdg.festi.Match.Enums.Drink;
-import com.gdg.festi.Match.Enums.Gender;
-import com.gdg.festi.Match.Enums.Mood;
-import com.gdg.festi.Match.Enums.Status;
+import com.gdg.festi.match.Dto.request.MatchInfoUpdateRequest;
+import com.gdg.festi.match.Enums.Drink;
+import com.gdg.festi.match.Enums.Gender;
+import com.gdg.festi.match.Enums.Mood;
+import com.gdg.festi.match.Enums.Status;
 import com.gdg.festi.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

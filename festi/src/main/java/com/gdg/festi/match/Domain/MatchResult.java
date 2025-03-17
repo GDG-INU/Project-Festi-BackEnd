@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Domain;
+package com.gdg.festi.match.Domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

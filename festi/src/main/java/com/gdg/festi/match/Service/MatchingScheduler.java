@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Service;
+package com.gdg.festi.match.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

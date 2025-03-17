@@ -1,5 +1,6 @@
 package com.gdg.festi.polaroid;
 
+import com.gdg.festi.alarm.AlarmService;
 import com.gdg.festi.common.FileUtil;
 import com.gdg.festi.common.S3Service;
 import com.gdg.festi.common.response.ApiResponse;
@@ -33,6 +34,7 @@ public class PolaroidService {
     private final UserService userService;
     private final PolaroidRepository polaroidRepository;
     private final S3Service s3Service;
+    private final AlarmService alarmService;
 
     /**
      * 폴라로이드 업로드
@@ -59,6 +61,9 @@ public class PolaroidService {
 
         log.info("폴라로이드 업로드 완료, imgLink : {}, polaroidId : {}", imgLink, newPolaroidInfo.getPolaroidId());
 
+        // 알림 등록
+        alarmService.register("폴라로이드가 등록되었습니다!", "polaroid");
+
         // DTO 변경
         UploadResponseDTO uploadResponseDTO = UploadResponseDTO.builder()
                 .imgLink(imgLink)
@@ -81,7 +86,7 @@ public class PolaroidService {
         // DTO 변경
         DownloadResponseDTO downloadResponseDTO = DownloadResponseDTO.builder()
                 .polaroidId(polaroidInfo.getPolaroidId())
-                .kakaoId(polaroidInfo.getUser().getKakaoId())
+                .userId(polaroidInfo.getUser().getId().toString())
                 .imgLink(polaroidInfo.getImgLink())
                 .build();
 
@@ -121,11 +126,14 @@ public class PolaroidService {
 
         log.info("폴라로이드 수정 완료, imgLink : {}, polaroidId : {}", imgLink, newPolaroidInfo.getPolaroidId());
 
+        // 알림 등록
+        alarmService.register("폴라로이드가 업데이트되었습니다!", "polaroid");
+
         // DTO 변경
         UpdateResponseDTO updateResponseDTO = UpdateResponseDTO.builder()
                 .imgLink(imgLink)
                 .polaroidId(newPolaroidInfo.getPolaroidId())
-                .kakaoId(userInfo.get().getKakaoId())
+                .userId(userInfo.get().getId().toString())
                 .build();
 
         return ApiResponse.SUCCESS(SuccessCode.SUCCESS_UPDATE, updateResponseDTO);
@@ -147,6 +155,9 @@ public class PolaroidService {
 
         log.info("폴라로이드가 삭제되었습니다, imgLink : {}, polaroidId : {}", deleteImgLink, polaroidInfo.getPolaroidId());
 
+        // 알림 등록
+        alarmService.register("폴라로이드가 삭제되었습니다!", "polaroid");
+
         return ApiResponse.SUCCESS(SuccessCode.SUCCESS_DELETE);
     }
 
@@ -166,7 +177,7 @@ public class PolaroidService {
             for (Polaroid polaroid : randomPolaroids) {
                 polaroidList.add(new SearchResponseDTO(
                         polaroid.getPolaroidId(),
-                        polaroid.getUser().getKakaoId(),
+                        polaroid.getUser().getId().toString(),
                         polaroid.getImgLink()
                 ));
             }
@@ -194,7 +205,7 @@ public class PolaroidService {
             for (Polaroid polaroid : polaroids) {
                 polaroidList.add(new SearchResponseDTO(
                         polaroid.getPolaroidId(),
-                        polaroid.getUser().getKakaoId(),
+                        polaroid.getUser().getId().toString(),
                         polaroid.getImgLink()
                 ));
             }

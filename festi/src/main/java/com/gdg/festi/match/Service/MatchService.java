@@ -1,14 +1,15 @@
-package com.gdg.festi.Match.Service;
+package com.gdg.festi.match.Service;
 
-import com.gdg.festi.Match.Domain.MatchInfo;
-import com.gdg.festi.Match.Dto.request.MatchInfoEnrollRequest;
-import com.gdg.festi.Match.Dto.request.MatchInfoUpdateRequest;
-import com.gdg.festi.Match.Dto.response.MatchInfoResponse;
-import com.gdg.festi.Match.Enums.Status;
-import com.gdg.festi.Match.Repository.MatchInfoRepository;
-import com.gdg.festi.Match.Repository.MatchResultRepository;
+import com.gdg.festi.match.Domain.MatchInfo;
+import com.gdg.festi.match.Dto.request.MatchInfoEnrollRequest;
+import com.gdg.festi.match.Dto.request.MatchInfoUpdateRequest;
+import com.gdg.festi.match.Dto.response.MatchInfoResponse;
+import com.gdg.festi.match.Enums.Status;
+import com.gdg.festi.match.Repository.MatchInfoRepository;
+import com.gdg.festi.match.Repository.MatchResultRepository;
 import com.gdg.festi.global.Api.ApiResponse;
 import com.gdg.festi.global.Api.ApiResponseMessages;
+import com.gdg.festi.global.exception.DuplicatedException;
 import com.gdg.festi.global.exception.ResourceNotFoundException;
 import com.gdg.festi.user.entity.User;
 import com.gdg.festi.user.repository.UserRepository;
@@ -38,17 +39,15 @@ public class MatchService {
     private final UserRepository userRepository;
 
     // 매칭 정보 등록
-    public ApiResponse<?> enrollMatchInfo(UserDetails userDetails, MatchInfoEnrollRequest matchInfoEnrollRequest){
+    public Long enrollMatchInfo(UserDetails userDetails, MatchInfoEnrollRequest matchInfoEnrollRequest){
 
         User user = getLoginUser(userDetails);
 
         if (isEnrolled(user, matchInfoEnrollRequest.getMatchDate())) {
-            return ApiResponse.fail(500, "이미 매칭을 신청한 내역이 있어요", null);
+            throw new DuplicatedException("이미 매칭 등록이 되어 있습니다.");
         }
 
-        Long matchId = matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest)).getMatchInfoId();
-
-        return ApiResponse.ok(ApiResponseMessages.ENROLL_STATUS, matchId);
+        return matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest)).getMatchInfoId();
     }
 
     // 매칭 등록 내역 조회
@@ -63,7 +62,7 @@ public class MatchService {
     }
 
     // 매칭 정보 수정
-    public ApiResponse<MatchInfoResponse> updateMatchInfo(UserDetails userDetails, LocalDate match_date, MatchInfoUpdateRequest matchInfoUpdateRequest){
+    public MatchInfoResponse updateMatchInfo(UserDetails userDetails, LocalDate match_date, MatchInfoUpdateRequest matchInfoUpdateRequest){
 
         User loginUser = getLoginUser(userDetails);
 
@@ -72,7 +71,7 @@ public class MatchService {
 
         updateInfo(matchInfo, matchInfoUpdateRequest);
 
-        return ApiResponse.ok(ApiResponseMessages.UPDATE_STATUS, buildMatchInfoResponse(matchInfo));
+        return buildMatchInfoResponse(matchInfo);
     }
 
     // 매칭 등록 취소
