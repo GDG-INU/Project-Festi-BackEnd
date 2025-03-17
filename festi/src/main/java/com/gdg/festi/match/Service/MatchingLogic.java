@@ -1,12 +1,15 @@
-package com.gdg.festi.Match.Service;
+package com.gdg.festi.match.Service;
 
-import com.gdg.festi.Match.Domain.MatchInfo;
-import com.gdg.festi.Match.Domain.MatchResult;
-import com.gdg.festi.Match.Enums.Drink;
-import com.gdg.festi.Match.Enums.Mood;
-import com.gdg.festi.Match.Repository.MatchInfoRepository;
-import com.gdg.festi.Match.Repository.MatchResultRepository;
+import com.gdg.festi.match.Domain.MatchInfo;
+import com.gdg.festi.match.Domain.MatchResult;
+import com.gdg.festi.match.Enums.Drink;
+import com.gdg.festi.match.Enums.Mood;
+import com.gdg.festi.match.Repository.MatchInfoRepository;
+import com.gdg.festi.match.Repository.MatchResultRepository;
+import com.gdg.festi.alarm.Alarm;
+import com.gdg.festi.alarm.AlarmRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MatchingLogic {
@@ -25,6 +29,8 @@ public class MatchingLogic {
     private final MatchInfoRepository matchInfoRepository;
 
     private final MatchResultRepository matchResultRepository;
+
+    private final AlarmRepository alarmRepository;
 
     private static final int FAILED = -1000;
 
@@ -92,12 +98,31 @@ public class MatchingLogic {
 
             matchedId.add(match_info_id_1);
             matchedId.add(match_info_id_2);
-        }
 
+            sendAlarm(matchInfo1, matchInfo2);
+        }
         // 매칭된 매칭 정보 상태 변경
         matchInfoRepository.updateStatusMatchedForIds(matchedId);
     }
 
+    private void sendAlarm(MatchInfo matchInfo1, MatchInfo matchInfo2) {
+        // 매칭 성공 알림 등록
+        alarmRepository.save(Alarm.builder()
+                .alarmMsg("주점팟 매칭이 완료되었어요.")
+                .alarmType("MATCHING")
+                .isRead(false)
+                .user(matchInfo1.getUser())
+                .build());
+
+        alarmRepository.save(Alarm.builder()
+                .alarmMsg("주점팟 매칭이 완료되었어요.")
+                .alarmType("MATCHING")
+                .isRead(false)
+                .user(matchInfo2.getUser())
+                .build());
+
+        log.info("알림이 등록되었습니다.");
+    }
 
 
     /// 로직

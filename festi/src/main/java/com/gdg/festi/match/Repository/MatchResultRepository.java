@@ -1,7 +1,7 @@
-package com.gdg.festi.Match.Repository;
+package com.gdg.festi.match.Repository;
 
-import com.gdg.festi.Match.Domain.MatchInfo;
-import com.gdg.festi.Match.Domain.MatchResult;
+import com.gdg.festi.match.Domain.MatchInfo;
+import com.gdg.festi.match.Domain.MatchResult;
 import com.gdg.festi.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

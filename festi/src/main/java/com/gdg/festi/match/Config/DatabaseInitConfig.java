@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Config;
+package com.gdg.festi.match.Config;
 
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;

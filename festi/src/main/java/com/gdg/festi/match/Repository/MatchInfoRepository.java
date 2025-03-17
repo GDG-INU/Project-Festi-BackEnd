@@ -1,6 +1,6 @@
-package com.gdg.festi.Match.Repository;
+package com.gdg.festi.match.Repository;
 
-import com.gdg.festi.Match.Domain.MatchInfo;
+import com.gdg.festi.match.Domain.MatchInfo;
 import com.gdg.festi.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,6 +20,6 @@ public interface MatchInfoRepository extends JpaRepository<MatchInfo, Long> {
     boolean existsByUserAndMatchDate(User user, LocalDate matchDate);
 
     @Modifying
-    @Query("UPDATE MatchInfo m SET m.status = com.gdg.festi.Match.Enums.Status.MATCHED WHERE m.matchInfoId IN :ids")
+    @Query("UPDATE MatchInfo m SET m.status = com.gdg.festi.match.Enums.Status.MATCHED WHERE m.matchInfoId IN :ids")
     void updateStatusMatchedForIds(@Param("ids") List<Long> ids);
 }

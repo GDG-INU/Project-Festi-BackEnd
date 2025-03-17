@@ -1,4 +1,4 @@
-package com.gdg.festi.Match.Dto.response;
+package com.gdg.festi.match.Dto.response;
 
 import lombok.Builder;
 import lombok.Data;
