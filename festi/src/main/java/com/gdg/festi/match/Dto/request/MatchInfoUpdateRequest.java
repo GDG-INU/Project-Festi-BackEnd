@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,7 +32,7 @@ public class MatchInfoUpdateRequest {
 
     private Mood mood;
 
-    private String contact;
+    private List<String> contact;
 
     private String groupImg;
 

@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 public class MatchInfo {
 
     @Id
+    @Column(name = "matchInfoId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long matchInfoId;
 
@@ -47,7 +49,10 @@ public class MatchInfo {
 
     private Mood mood;
 
-    private String contact;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "matchInfoId"))
+    @Column(name = "contact")
+    private List<String> contact;
 
     private Status status;
 
@@ -99,7 +104,7 @@ public class MatchInfo {
         this.mood = mood;
     }
 
-    public void updateContact(String contact) {
+    public void updateContact(List<String> contact) {
         this.contact = contact;
     }
 
