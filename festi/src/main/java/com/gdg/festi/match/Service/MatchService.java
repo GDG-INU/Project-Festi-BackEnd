@@ -131,7 +131,6 @@ public class MatchService {
                 .contact(matchInfoEnrollRequest.getContact())
                 .groupImg(matchInfoEnrollRequest.getGroupImg())
                 .status(Status.WAITING)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 
