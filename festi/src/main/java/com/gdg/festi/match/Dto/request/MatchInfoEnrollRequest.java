@@ -43,7 +43,7 @@ public class MatchInfoEnrollRequest {
     private Mood mood;
 
     @NotNull
-    private List<String> contact;
+    private String contact;
 
     @NotNull
     private String groupImg;

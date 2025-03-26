@@ -57,10 +57,10 @@ public class MatchInfo {
     @Enumerated(EnumType.STRING)
     private Mood mood;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "matchInfoId"))
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "matchInfoId"))
     @Column(name = "contact")
-    private List<String> contact;
+    private String contact;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -109,7 +109,7 @@ public class MatchInfo {
         this.mood = mood;
     }
 
-    public void updateContact(List<String> contact) {
+    public void updateContact(String contact) {
         this.contact = contact;
     }
 

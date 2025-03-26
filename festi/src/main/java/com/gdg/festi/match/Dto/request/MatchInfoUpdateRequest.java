@@ -32,7 +32,7 @@ public class MatchInfoUpdateRequest {
 
     private Mood mood;
 
-    private List<String> contact;
+    private String contact;
 
     private String groupImg;
 

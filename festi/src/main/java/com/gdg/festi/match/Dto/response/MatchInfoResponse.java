@@ -31,6 +31,6 @@ public class MatchInfoResponse {
 
     private Mood mood;
 
-    private List<String> contact;
+    private String contact;
 
 }
