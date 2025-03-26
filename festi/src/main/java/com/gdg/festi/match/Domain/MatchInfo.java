@@ -11,6 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class MatchInfo {
 
     @Id
@@ -41,12 +45,16 @@ public class MatchInfo {
 
     private LocalDateTime startTime;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     private Gender desiredGender;
 
+    @Enumerated(EnumType.STRING)
     private Drink drink;
 
+    @Enumerated(EnumType.STRING)
     private Mood mood;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -54,19 +62,16 @@ public class MatchInfo {
     @Column(name = "contact")
     private List<String> contact;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private String groupImg;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     private LocalDateTime modifiedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
-    }
 
     public void updateGroupName(String groupName){
         this.groupName = groupName;
