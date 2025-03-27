@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -41,13 +40,16 @@ public class MatchService {
     // 매칭 정보 등록
     public Long enrollMatchInfo(UserDetails userDetails, MatchInfoEnrollRequest matchInfoEnrollRequest){
 
+        // 유저
         User user = getLoginUser(userDetails);
 
+        // 매칭 중복 검사
         if (isEnrolled(user, matchInfoEnrollRequest.getMatchDate())) {
             throw new DuplicatedException("이미 매칭 등록이 되어 있습니다.");
         }
 
-        return matchInfoRepository.save(buildMatchInfo(user, matchInfoEnrollRequest)).getMatchInfoId();
+        MatchInfo matchInfo = MatchInfo.of(user, matchInfoEnrollRequest, Status.WAITING);
+        return matchInfoRepository.save(matchInfo).getMatchInfoId();
     }
 
     // 매칭 등록 내역 조회
@@ -114,25 +116,6 @@ public class MatchService {
     }
 
     /// 빌더
-    // 매칭 생성 빌더
-    private MatchInfo buildMatchInfo(User user, MatchInfoEnrollRequest matchInfoEnrollRequest) {
-
-        return MatchInfo.builder()
-                .user(user)
-                .groupName(matchInfoEnrollRequest.getGroupName())
-                .groupInfo(matchInfoEnrollRequest.getGroupInfo())
-                .people(matchInfoEnrollRequest.getPeople())
-                .matchDate(matchInfoEnrollRequest.getMatchDate())
-                .startTime(matchInfoEnrollRequest.getStartTime())
-                .gender(matchInfoEnrollRequest.getGender())
-                .desiredGender(matchInfoEnrollRequest.getDesiredGender())
-                .drink(matchInfoEnrollRequest.getDrink())
-                .mood(matchInfoEnrollRequest.getMood())
-                .contact(matchInfoEnrollRequest.getContact())
-                .groupImg(matchInfoEnrollRequest.getGroupImg())
-                .status(Status.WAITING)
-                .build();
-    }
 
     private MatchInfoResponse buildMatchInfoResponse(MatchInfo matchInfo) {
         return MatchInfoResponse.builder()

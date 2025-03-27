@@ -1,5 +1,6 @@
 package com.gdg.festi.match.Domain;
 
+import com.gdg.festi.match.Dto.request.MatchInfoEnrollRequest;
 import com.gdg.festi.match.Dto.request.MatchInfoUpdateRequest;
 import com.gdg.festi.match.Enums.Drink;
 import com.gdg.festi.match.Enums.Gender;
@@ -8,7 +9,6 @@ import com.gdg.festi.match.Enums.Status;
 import com.gdg.festi.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,10 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Getter
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class MatchInfo {
 
@@ -72,6 +70,33 @@ public class MatchInfo {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    private MatchInfo(User user, String groupInfo, String groupName,
+                      Integer people, LocalDate matchDate, LocalDateTime startTime,
+                      Gender gender, Gender desiredGender, Drink drink, Mood mood,
+                      List<String> contact, Status status, String groupImg) {
+        this.user = user;
+        this.groupInfo = groupInfo;
+        this.groupName = groupName;
+        this.people = people;
+        this.matchDate = matchDate;
+        this.startTime = startTime;
+        this.gender = gender;
+        this.desiredGender = desiredGender;
+        this.drink = drink;
+        this.mood = mood;
+        this.contact = contact;
+        this.status = status;
+        this.groupImg = groupImg;
+    }
+
+    public static MatchInfo of(User user, MatchInfoEnrollRequest enrollRequest, Status status) {
+        return new MatchInfo(user, enrollRequest.getGroupInfo(), enrollRequest.getGroupName(),
+                enrollRequest.getPeople(), enrollRequest.getMatchDate(), enrollRequest.getStartTime(),
+                enrollRequest.getGender(), enrollRequest.getDesiredGender(), enrollRequest.getDrink(), enrollRequest.getMood(),
+                enrollRequest.getContact(), status, enrollRequest.getGroupImg());
+    }
+
 
     public void updateGroupName(String groupName){
         this.groupName = groupName;
@@ -174,3 +199,5 @@ public class MatchInfo {
     }
 
 }
+
+

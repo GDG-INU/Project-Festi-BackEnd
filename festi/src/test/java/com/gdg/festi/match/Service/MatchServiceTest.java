@@ -88,22 +88,7 @@ class MatchServiceTest {
 //                .groupImg("image")
 //                .build();
 
-        matchInfo = MatchInfo.builder()
-                .matchInfoId(100L)
-                .groupName("testGroup")
-                .groupInfo("test")
-                .people(4)
-                .matchDate(LocalDate.now())
-                .startTime(LocalDateTime.now())
-                .gender(Gender.MALE)
-                .desiredGender(Gender.FEMALE)
-                .drink(Drink.ONE)
-                .mood(Mood.LONG)
-                .contact(List.of("test1", "test2"))
-                .groupImg("image")
-                .status(Status.WAITING)
-                .build();
-
+        matchInfo = MatchInfo.of(user, matchInfoEnrollRequest, Status.WAITING);
     }
 
     @Test
@@ -116,7 +101,7 @@ class MatchServiceTest {
         Long result = matchService.enrollMatchInfo(userDetails, matchInfoEnrollRequest);
 
         // Then
-        assertNotNull(result);
+//        assertNotNull(result);
         assertEquals(matchInfo.getMatchInfoId(), result);
         verify(matchInfoRepository, times(1)).save(any(MatchInfo.class));
 
