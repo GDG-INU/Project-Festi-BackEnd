@@ -49,23 +49,16 @@ public class MatchingLogic {
 
         for (MatchInfo matchInfo1 : matchInfoList) {
             for (MatchInfo matchInfo2 : matchInfoList) {
-
                 // 같은 매칭 정보와 원하는 성별이 다른 매칭은 제외
                 if (isSameMatchInfo(matchInfo1, matchInfo2) && checkGender(matchInfo1, matchInfo2)) {
                     continue;
                 }
-
                 // 매칭 정보 id 순서 정렬
                 Pair<Long, Long> infoResult = Pair.of(
                         Math.min(matchInfo1.getMatchInfoId(), matchInfo2.getMatchInfoId()),
                         Math.max(matchInfo1.getMatchInfoId(), matchInfo2.getMatchInfoId())
                 );
-
-                int score = startTimeScore(matchInfo1.getStartTime(), matchInfo2.getStartTime()) +
-                        peopleScore(matchInfo1.getPeople(), matchInfo2.getPeople()) +
-                        drinkScore(matchInfo1.getDrink(), matchInfo2.getDrink()) +
-                        moodScore(matchInfo1.getMood(), matchInfo2.getMood());
-
+                int score = evaluateScore(matchInfo1, matchInfo2);
                 // 매칭 점수가 50 이상인 경우에만 매칭 결과 저장
                 if (isFailed(score)) {
                     continue;
@@ -84,21 +77,12 @@ public class MatchingLogic {
             if (isMatched(matchedId, match_info_id_1, match_info_id_2)) {
                 continue;
             }
-
-            MatchInfo matchInfo1 = matchInfoRepository.findById(match_info_id_1)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
-
-            MatchInfo matchInfo2 = matchInfoRepository.findById(match_info_id_2)
-                    .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
-
-            matchResultRepository.save(MatchResult.builder()
-                    .matchInfo1(matchInfo1)
-                    .matchInfo2(matchInfo2)
-                    .build());
+            MatchInfo matchInfo1 = findById(match_info_id_1);
+            MatchInfo matchInfo2 = findById(match_info_id_2);
+            matchResultRepository.save(MatchResult.of(matchInfo1, matchInfo2));
 
             matchedId.add(match_info_id_1);
             matchedId.add(match_info_id_2);
-
             sendAlarm(matchInfo1, matchInfo2);
         }
         // 매칭된 매칭 정보 상태 변경
@@ -154,6 +138,7 @@ public class MatchingLogic {
             return FAILED;
         }
     }
+
 
     // 팀 인원에 따른 점수 계산
     private int peopleScore(int people1, int people2) {
@@ -214,6 +199,13 @@ public class MatchingLogic {
         };
     }
 
+    private int evaluateScore(MatchInfo matchInfo1, MatchInfo matchInfo2) {
+        return startTimeScore(matchInfo1.getStartTime(), matchInfo2.getStartTime()) +
+                peopleScore(matchInfo1.getPeople(), matchInfo2.getPeople()) +
+                drinkScore(matchInfo1.getDrink(), matchInfo2.getDrink()) +
+                moodScore(matchInfo1.getMood(), matchInfo2.getMood());
+    }
+
     private boolean isSameMatchInfo(MatchInfo matchInfo1, MatchInfo matchInfo2) {
         return matchInfo1.getUser().equals(matchInfo2.getUser());
     }
@@ -228,5 +220,10 @@ public class MatchingLogic {
 
     private boolean isMatched (List<Long> matchedId, Long match_info_id_1, Long match_info_id_2) {
         return matchedId.contains(match_info_id_1) && matchedId.contains(match_info_id_2);
+    }
+
+    private MatchInfo findById(Long match_info_id_1) {
+        return matchInfoRepository.findById(match_info_id_1)
+                .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
     }
 }

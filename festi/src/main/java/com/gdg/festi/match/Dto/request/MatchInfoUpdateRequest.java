@@ -3,15 +3,14 @@ package com.gdg.festi.match.Dto.request;
 import com.gdg.festi.match.Enums.Drink;
 import com.gdg.festi.match.Enums.Gender;
 import com.gdg.festi.match.Enums.Mood;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchInfoUpdateRequest {
 
     private String groupName;
