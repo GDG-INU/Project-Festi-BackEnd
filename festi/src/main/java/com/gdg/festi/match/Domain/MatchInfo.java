@@ -9,6 +9,7 @@ import com.gdg.festi.match.Enums.Status;
 import com.gdg.festi.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -55,12 +56,12 @@ public class MatchInfo {
     @Enumerated(EnumType.STRING)
     private Mood mood;
 
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "matchInfoId"))
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "contact", joinColumns = @JoinColumn(name = "matchInfoId"))
     @Column(name = "contact")
-    private String contact;
+    private List<String> contact;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
 
     private String groupImg;
@@ -71,10 +72,11 @@ public class MatchInfo {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
+    @Builder
     private MatchInfo(User user, String groupInfo, String groupName,
                       Integer people, LocalDate matchDate, LocalDateTime startTime,
                       Gender gender, Gender desiredGender, Drink drink, Mood mood,
-                      List<String> contact, Status status, String groupImg) {
+                      List<String> contact, Status status, LocalDateTime createdAt, String groupImg) {
         this.user = user;
         this.groupInfo = groupInfo;
         this.groupName = groupName;
@@ -87,115 +89,47 @@ public class MatchInfo {
         this.mood = mood;
         this.contact = contact;
         this.status = status;
+        this.createdAt = createdAt;
         this.groupImg = groupImg;
     }
 
-    public static MatchInfo of(User user, MatchInfoEnrollRequest enrollRequest, Status status) {
-        return new MatchInfo(user, enrollRequest.getGroupInfo(), enrollRequest.getGroupName(),
-                enrollRequest.getPeople(), enrollRequest.getMatchDate(), enrollRequest.getStartTime(),
-                enrollRequest.getGender(), enrollRequest.getDesiredGender(), enrollRequest.getDrink(), enrollRequest.getMood(),
-                enrollRequest.getContact(), status, enrollRequest.getGroupImg());
-    }
+    public static MatchInfo of(User user, MatchInfoEnrollRequest enrollRequest) {
+        return MatchInfo.builder()
+                .user(user)
+                .groupInfo(enrollRequest.getGroupInfo())
+                .groupName(enrollRequest.getGroupName())
+                .people(enrollRequest.getPeople())
+                .matchDate(enrollRequest.getMatchDate())
+                .startTime(enrollRequest.getStartTime())
+                .gender(enrollRequest.getGender())
+                .desiredGender(enrollRequest.getDesiredGender())
+                .drink(enrollRequest.getDrink())
+                .mood(enrollRequest.getMood())
+                .contact(enrollRequest.getContact())
+                .status(Status.WAITING)
+                .groupImg(enrollRequest.getGroupImg())
+                .build();
 
-
-    public void updateGroupName(String groupName){
-        this.groupName = groupName;
-    }
-
-    public void updateGroupInfo(String groupInfo){
-        this.groupInfo = groupInfo;
-    }
-
-    public void updatePeople(Integer people){
-        this.people = people;
-    }
-
-    public void updateMatchDate(LocalDate matchDate){
-        this.matchDate = matchDate;
-    }
-
-    public void updateStartTime(LocalDateTime startTime){
-        this.startTime = startTime;
-    }
-
-    public void updateGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void updateDesired_gender(Gender gender) {
-        this.desiredGender = gender;
-    }
-
-    public void updateDrink(Drink drink) {
-        this.drink = drink;
-    }
-
-    public void updateMood(Mood mood) {
-        this.mood = mood;
-    }
-
-    public void updateContact(String contact) {
-        this.contact = contact;
-    }
-
-    public void updateGroupImg(String groupImg) {
-        this.groupImg = groupImg;
     }
 
     public void updateStatus(Status status) {
         this.status = status;
     }
 
-    public void updateModifiedAt(LocalDateTime modified_at) {
-        this.modifiedAt = modified_at;
-    }
-
     public void updateMatch(MatchInfoUpdateRequest matchInfoUpdateRequest) {
-        if (!this.groupName.equals(matchInfoUpdateRequest.getGroupName())) {
-            this.updateGroupName(matchInfoUpdateRequest.getGroupName());
-        }
 
-        if (!this.groupInfo.equals(matchInfoUpdateRequest.getGroupInfo())) {
-            this.updateGroupInfo(matchInfoUpdateRequest.getGroupInfo());
-        }
-
-        if (!this.people.equals(matchInfoUpdateRequest.getPeople())) {
-            this.updatePeople(matchInfoUpdateRequest.getPeople());
-        }
-
-        if (!this.matchDate.equals(matchInfoUpdateRequest.getMatchDate())) {
-            this.updateMatchDate(matchInfoUpdateRequest.getMatchDate());
-        }
-
-        if (!this.startTime.equals(matchInfoUpdateRequest.getStartTime())) {
-            this.updateStartTime(matchInfoUpdateRequest.getStartTime());
-        }
-
-        if (!this.gender.equals(matchInfoUpdateRequest.getGender())) {
-            this.updateGender(matchInfoUpdateRequest.getGender());
-        }
-
-        if (!this.desiredGender.equals(matchInfoUpdateRequest.getDesiredGender())) {
-            this.updateDesired_gender(matchInfoUpdateRequest.getDesiredGender());
-        }
-
-        if (!this.drink.equals(matchInfoUpdateRequest.getDrink())) {
-            this.updateDrink(matchInfoUpdateRequest.getDrink());
-        }
-
-        if (!this.mood.equals(matchInfoUpdateRequest.getMood())) {
-            this.updateMood(matchInfoUpdateRequest.getMood());
-        }
-
-        if (!this.contact.equals(matchInfoUpdateRequest.getContact())) {
-            this.updateContact(matchInfoUpdateRequest.getContact());
-        }
-
-        if (!this.groupImg.equals(matchInfoUpdateRequest.getGroupImg())) {
-            this.updateGroupImg(matchInfoUpdateRequest.getGroupImg());
-        }
-
-        this.updateModifiedAt(LocalDateTime.now());
+        this.groupName = matchInfoUpdateRequest.getGroupName();
+        this.groupInfo = matchInfoUpdateRequest.getGroupInfo();
+        this.people = matchInfoUpdateRequest.getPeople();
+        this.matchDate = matchInfoUpdateRequest.getMatchDate();
+        this.gender = matchInfoUpdateRequest.getGender();
+        this.startTime = matchInfoUpdateRequest.getStartTime();
+        this.desiredGender = matchInfoUpdateRequest.getDesiredGender();
+        this.drink = matchInfoUpdateRequest.getDrink();
+        this.mood = matchInfoUpdateRequest.getMood();
+        this.contact = matchInfoUpdateRequest.getContact();
+        this.groupImg = matchInfoUpdateRequest.getGroupImg();
+        this.modifiedAt = LocalDateTime.now();
     }
 
 }

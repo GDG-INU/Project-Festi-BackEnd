@@ -22,4 +22,13 @@ public class MatchResult {
 
     @ManyToOne
     private MatchInfo matchInfo2;
+
+    private MatchResult(MatchInfo matchInfo1, MatchInfo matchInfo2) {
+        this.matchInfo1 = matchInfo1;
+        this.matchInfo2 = matchInfo2;
+    }
+
+    public static MatchResult of(MatchInfo matchInfo1, MatchInfo matchInfo2) {
+        return new MatchResult(matchInfo1, matchInfo2);
+    }
 }

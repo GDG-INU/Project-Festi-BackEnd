@@ -6,15 +6,14 @@ import com.gdg.festi.match.Enums.Drink;
 import com.gdg.festi.match.Enums.Gender;
 import com.gdg.festi.match.Enums.Mood;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchInfoEnrollRequest {
 
     @NotNull
@@ -45,7 +44,7 @@ public class MatchInfoEnrollRequest {
     private Mood mood;
 
     @NotNull
-    private String contact;
+    private List<String> contact;
 
     @NotNull
     private String groupImg;
