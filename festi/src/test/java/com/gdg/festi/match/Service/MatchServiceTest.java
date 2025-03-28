@@ -88,7 +88,7 @@ class MatchServiceTest {
 //                .groupImg("image")
 //                .build();
 
-        matchInfo = MatchInfo.of(user, matchInfoEnrollRequest, Status.WAITING);
+        matchInfo = MatchInfo.of(user, matchInfoEnrollRequest);
     }
 
     @Test
