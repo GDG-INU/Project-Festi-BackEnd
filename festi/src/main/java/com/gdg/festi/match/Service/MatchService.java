@@ -39,96 +39,57 @@ public class MatchService {
 
     // 매칭 정보 등록
     public Long enrollMatchInfo(UserDetails userDetails, MatchInfoEnrollRequest matchInfoEnrollRequest){
-
-        // 유저
-        User user = getLoginUser(userDetails);
-
+        User user = loginUser(userDetails);
         // 매칭 중복 검사
         if (isEnrolled(user, matchInfoEnrollRequest.getMatchDate())) {
             throw new DuplicatedException("이미 매칭 등록이 되어 있습니다.");
         }
-
-        MatchInfo matchInfo = MatchInfo.of(user, matchInfoEnrollRequest, Status.WAITING);
+        MatchInfo matchInfo = MatchInfo.of(user, matchInfoEnrollRequest);
         return matchInfoRepository.save(matchInfo).getMatchInfoId();
     }
 
     // 매칭 등록 내역 조회
     public ApiResponse<MatchInfoResponse> getMatchInfo(UserDetails userDetails, LocalDate match_date){
-
-        User loginUser = getLoginUser(userDetails);
-
-        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
-                .orElseThrow(() -> new IllegalArgumentException("매칭 등록 내역이 없어요."));
-
-        return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, buildMatchInfoResponse(matchInfo));
+        User loginUser = loginUser(userDetails);
+        MatchInfo matchInfo = findByUserAndMatchDate(match_date, loginUser);
+        return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, MatchInfoResponse.of(matchInfo));
     }
 
     // 매칭 정보 수정
+
     public MatchInfoResponse updateMatchInfo(UserDetails userDetails, LocalDate match_date, MatchInfoUpdateRequest matchInfoUpdateRequest){
-
-        User loginUser = getLoginUser(userDetails);
-
-        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
-
-        updateInfo(matchInfo, matchInfoUpdateRequest);
-
-        return buildMatchInfoResponse(matchInfo);
+        User loginUser = loginUser(userDetails);
+        MatchInfo matchInfo = findByUserAndMatchDate(match_date, loginUser);
+        matchInfo.updateMatch(matchInfoUpdateRequest);
+        return MatchInfoResponse.of(matchInfo);
     }
 
     // 매칭 등록 취소
     public ApiResponse<?> cancelMatchInfo(UserDetails userDetails, LocalDate match_date){
-
-        User loginUser = getLoginUser(userDetails);
-
-        MatchInfo matchInfo = matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
-                .orElseThrow(() -> new IllegalArgumentException("해당 매칭 정보가 없습니다."));
-
+        User loginUser = loginUser(userDetails);
+        MatchInfo matchInfo = findByUserAndMatchDate(match_date, loginUser);
         matchInfo.updateStatus(Status.CANCELED);
-
         return ApiResponse.ok(ApiResponseMessages.CANCEL_STATUS, "매칭 요청 취소 성공");
     }
 
     public ApiResponse<MatchInfoResponse> getMatchResult(UserDetails userDetails, LocalDate match_date) {
-
-        User user = getLoginUser(userDetails);
-
-        MatchInfo otherMatchInfo = matchResultRepository.findMatchedInfo(user, match_date)
-                .orElseThrow(() -> new ResourceNotFoundException("매칭 결과가 나오지 않았어요."));
-
-        return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, buildMatchInfoResponse(otherMatchInfo));
+        User user = loginUser(userDetails);
+        MatchInfo otherMatchInfo = findByUserAndMatchDate(match_date, user);
+        return ApiResponse.ok(ApiResponseMessages.SUCCESS_STATUS, MatchInfoResponse.of(otherMatchInfo));
     }
 
     /// 비즈니스 로직
-
-    // 매칭 정보 수정
-    private void updateInfo(MatchInfo matchInfo, MatchInfoUpdateRequest matchInfoUpdateRequest) {
-        matchInfo.updateMatch(matchInfoUpdateRequest);
-    }
-
     private boolean isEnrolled(User user, LocalDate matchDate) {
         return matchInfoRepository.existsByUserAndMatchDate(user, matchDate);
     }
 
-    private User getLoginUser(UserDetails userDetails) {
+    private User loginUser(UserDetails userDetails) {
         return userRepository.findByKakaoId(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("해당 유저가 존재하지 않습니다."));
     }
 
-    /// 빌더
-
-    private MatchInfoResponse buildMatchInfoResponse(MatchInfo matchInfo) {
-        return MatchInfoResponse.builder()
-                .matchInfoId(matchInfo.getMatchInfoId())
-                .groupName(matchInfo.getGroupName())
-                .groupImg(matchInfo.getGroupImg())
-                .gender(matchInfo.getGender())
-                .desiredGender(matchInfo.getDesiredGender())
-                .matchDateTime(matchInfo.getStartTime())
-                .drink(matchInfo.getDrink())
-                .people(matchInfo.getPeople())
-                .mood(matchInfo.getMood())
-                .contact(matchInfo.getContact())
-                .build();
+    private MatchInfo findByUserAndMatchDate(LocalDate match_date, User loginUser) {
+        return matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
+                .orElseThrow(() -> new IllegalArgumentException("매칭 등록 내역이 없어요."));
     }
 }
