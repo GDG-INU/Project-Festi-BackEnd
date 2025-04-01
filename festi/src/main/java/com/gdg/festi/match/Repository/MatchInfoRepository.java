@@ -1,6 +1,7 @@
 package com.gdg.festi.match.Repository;
 
 import com.gdg.festi.match.Domain.MatchInfo;
+import com.gdg.festi.match.Enums.Status;
 import com.gdg.festi.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public interface MatchInfoRepository extends JpaRepository<MatchInfo, Long> {
 
-    Optional<MatchInfo> findByUserAndMatchDate(User user, LocalDate matchDate);
+    Optional<MatchInfo> findByUserAndMatchDateAndStatus(User user, LocalDate matchDate, Status status);
 
     Optional<List<MatchInfo>> findAllByMatchDate(LocalDate matchDate);
 

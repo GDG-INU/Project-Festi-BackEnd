@@ -68,7 +68,7 @@ public class MatchService {
     public ApiResponse<?> cancelMatchInfo(UserDetails userDetails, LocalDate match_date){
         User loginUser = loginUser(userDetails);
         MatchInfo matchInfo = findByUserAndMatchDate(match_date, loginUser);
-        matchInfo.updateStatus(Status.CANCELED);
+        matchInfoRepository.delete(matchInfo);
         return ApiResponse.ok(ApiResponseMessages.CANCEL_STATUS, "매칭 요청 취소 성공");
     }
 
@@ -89,7 +89,7 @@ public class MatchService {
     }
 
     private MatchInfo findByUserAndMatchDate(LocalDate match_date, User loginUser) {
-        return matchInfoRepository.findByUserAndMatchDate(loginUser, match_date)
+        return matchInfoRepository.findByUserAndMatchDateAndStatus(loginUser, match_date, Status.WAITING)
                 .orElseThrow(() -> new IllegalArgumentException("매칭 등록 내역이 없어요."));
     }
 }
