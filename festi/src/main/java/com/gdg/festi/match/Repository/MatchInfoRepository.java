@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,9 @@ public interface MatchInfoRepository extends JpaRepository<MatchInfo, Long> {
 
     Optional<MatchInfo> findByUserAndMatchDateAndStatus(User user, LocalDate matchDate, Status status);
 
-    Optional<List<MatchInfo>> findAllByMatchDate(LocalDate matchDate);
+    List<MatchInfo> findAllByMatchDate(LocalDate matchDate);
+
+    Optional<List<MatchInfo>> findAllByStatus(Status status);
 
     boolean existsByUserAndMatchDate(User user, LocalDate matchDate);
 

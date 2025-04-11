@@ -25,7 +25,7 @@ public class MatchInfoUpdateRequest {
 
     private Gender gender;
 
-    private Gender desiredGender;
+    private List<Gender> desiredGender;
 
     private Drink drink;
 

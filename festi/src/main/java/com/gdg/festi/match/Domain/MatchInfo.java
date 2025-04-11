@@ -48,7 +48,7 @@ public class MatchInfo {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    private Gender desiredGender;
+    private List<Gender> desiredGender;
 
     @Enumerated(EnumType.STRING)
     private Drink drink;
@@ -75,7 +75,7 @@ public class MatchInfo {
     @Builder
     private MatchInfo(User user, String groupInfo, String groupName,
                       Integer people, LocalDate matchDate, LocalDateTime startTime,
-                      Gender gender, Gender desiredGender, Drink drink, Mood mood,
+                      Gender gender, List<Gender> desiredGender, Drink drink, Mood mood,
                       List<String> contact, Status status, LocalDateTime createdAt, String groupImg) {
         this.user = user;
         this.groupInfo = groupInfo;
