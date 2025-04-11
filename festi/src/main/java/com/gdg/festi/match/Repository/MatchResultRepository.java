@@ -18,4 +18,11 @@ public interface MatchResultRepository extends JpaRepository<MatchResult, Long> 
             "WHERE mi1.user = :user AND mi1.matchDate = :matchDate " +
             "AND mi2.matchInfoId <> mi1.matchInfoId")
     Optional<MatchInfo> findMatchedInfo(@Param("user") User user, @Param("matchDate") LocalDate matchDate);
+
+    @Query("SELECT mr FROM MatchResult mr " +
+            "JOIN mr.matchInfo1 mi1 " +
+            "JOIN mr.matchInfo2 mi2 " +
+            "WHERE (mi1.user = :user OR mi2.user = :user) " +
+            "AND (mi1.matchDate = :matchDate OR mi2.matchDate = :matchDate)")
+    Optional<MatchResult> findMatchResultByUserAndDate(@Param("user") User user, @Param("matchDate") LocalDate matchDate);
 }

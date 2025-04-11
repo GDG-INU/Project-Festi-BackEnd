@@ -34,8 +34,7 @@ public class MatchInfoEnrollRequest {
     @NotNull
     private Gender gender;
 
-    @NotNull
-    private Gender desiredGender;
+    private List<Gender> desiredGender;
 
     @NotNull
     private Drink drink;
@@ -57,7 +56,7 @@ public class MatchInfoEnrollRequest {
             @JsonProperty("matchDate") LocalDate matchDate,
             @JsonProperty("startTime") LocalDateTime startTime,
             @JsonProperty("gender") Gender gender,
-            @JsonProperty("desiredGender") Gender desiredGender,
+            @JsonProperty("desiredGender") List<Gender> desiredGender,
             @JsonProperty("drink") Drink drink,
             @JsonProperty("mood") Mood mood,
             @JsonProperty("contact") List<String> contact,

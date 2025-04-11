@@ -52,7 +52,7 @@ public class MatchController {
 
     // 매칭 결과 조회
     @GetMapping("/match/result/{day}")
-    public ApiResponse<MatchInfoResponse> getMatchResult(@LoginUser UserDetails userDetails, @PathVariable String day) {
+    public ApiResponse<?> getMatchResult(@LoginUser UserDetails userDetails, @PathVariable String day) {
         return matchService.getMatchResult(userDetails, LocalDate.parse(day));
     }
 }

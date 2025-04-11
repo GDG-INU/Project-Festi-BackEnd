@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return ResponseEntity.status(503).body(ApiResponse.fail(503, ex.getMessage(), null));
+        return ResponseEntity.status(404).body(ApiResponse.fail(404, ex.getMessage(), null));
     }
 
     @ExceptionHandler(DuplicatedException.class)

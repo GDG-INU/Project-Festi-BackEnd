@@ -21,7 +21,7 @@ public class MatchInfoResponse {
 
     private Gender gender;
 
-    private Gender desiredGender;
+    private List<Gender> desiredGender;
 
     private LocalDateTime matchDateTime;
 
@@ -34,7 +34,7 @@ public class MatchInfoResponse {
     private List<String> contact;
 
     @Builder
-    private MatchInfoResponse(Long matchInfoId, String groupName, String groupImg, Gender gender, Gender desiredGender, LocalDateTime matchDateTime, Drink drink, int people, Mood mood, List<String> contact) {
+    private MatchInfoResponse(Long matchInfoId, String groupName, String groupImg, Gender gender, List<Gender> desiredGender, LocalDateTime matchDateTime, Drink drink, int people, Mood mood, List<String> contact) {
         this.matchInfoId = matchInfoId;
         this.groupName = groupName;
         this.groupImg = groupImg;
