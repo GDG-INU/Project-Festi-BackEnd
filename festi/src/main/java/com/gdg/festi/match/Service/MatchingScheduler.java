@@ -23,33 +23,40 @@ public class MatchingScheduler {
     @Scheduled(cron = "${matchingDay1.cron}")
     public void executeMatchingDay1() {
 
-        log.info("축제 1일차 매칭 실행 시작");
+        log.info("===== 축제 1일차 매칭 실행 시작 =====");
 
         // 매칭 로직 호출 (2025년 2월 20일 기준)
         matchingLogic.match(day1);
 
-        log.info("축제 1일차 매칭 실행 완료");
+        log.info("===== 축제 1일차 매칭 실행 완료 =====");
     }
 
     @Scheduled(cron = "${matchingDay2.cron}")
     public void executeMatchingDay2() {
 
-        log.info("축제 2일차 매칭 실행 시작");
+        log.info("===== 축제 2일차 매칭 실행 시작 =====");
 
         // 매칭 로직 호출 (2025년 2월 20일 기준)
         matchingLogic.match(day2);
 
-        log.info("축제 2일차 매칭 실행 완료");
+        log.info("===== 축제 2일차 매칭 실행 완료 =====");
     }
 
     @Scheduled(cron = "${matchingDay3.cron}")
     public void executeMatchingDay3() {
 
-        log.info("축제 3일차 매칭 실행 시작");
+        log.info("===== 축제 3일차 매칭 실행 시작 ======");
 
         // 매칭 로직 호출 (2025년 2월 20일 기준)
         matchingLogic.match(day3);
 
-        log.info("축제 3일차 매칭 실행 완료");
+        log.info("===== 축제 3일차 매칭 실행 완료 =====");
+    }
+
+    @Scheduled(cron = "0 0/1 * * * *") // 매 1분 0초에 실행
+    public void executeMatchingTest() {
+        log.info("===== 테스트 매칭 실행 시작 =====");
+        matchingLogic.match(LocalDate.of(2025, 2, 20)); // 테스트용 날짜 (필요시 수정)
+        log.info("===== 테스트 매칭 실행 완료 =====");
     }
 }
