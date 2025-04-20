@@ -90,6 +90,7 @@ public class MatchingLogic {
             Long id2 = pair.getRight();
 
             if (matchedIdList.contains(id1) || matchedIdList.contains(id2)) {
+                log.info("이미 매칭된 사용자입니다. 매칭을 건너뜁니다. {}, {}", id1, id2);
                 continue;
             }
 
@@ -130,12 +131,13 @@ public class MatchingLogic {
         // 매칭 성공 알림 등록
         alarmRepository.save(buildAlarm(MATCHING_SUCCESS_MESSAGE, matchInfo1));
         alarmRepository.save(buildAlarm(MATCHING_SUCCESS_MESSAGE, matchInfo2));
-        log.info("알림이 등록되었습니다.");
+        log.info("매칭 성공 알림을 전송합니다. {} {}", matchInfo1.getUser().getNickname(), matchInfo2.getUser().getNickname());
     }
 
     private void sendFailureAlarms(HashSet<MatchInfo> failedMatches) {
         for (MatchInfo failedMatch : failedMatches) {
             alarmRepository.save(buildAlarm(MATCHING_FAIL_MESSAGE, failedMatch));
+            log.info("매칭 실패 알림을 전송합니다. {}", failedMatch.getUser().getNickname());
         }
         log.info("매칭 실패 알림이 등록되었습니다.");
     }

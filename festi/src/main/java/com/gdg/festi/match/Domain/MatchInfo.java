@@ -47,7 +47,10 @@ public class MatchInfo {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "match_info_desired_gender", joinColumns = @JoinColumn(name = "match_info_id"))
+    @Column(name = "desired_gender")
     private List<Gender> desiredGender;
 
     @Enumerated(EnumType.STRING)
@@ -61,7 +64,7 @@ public class MatchInfo {
     @Column(name = "contact")
     private List<String> contact;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private String groupImg;
