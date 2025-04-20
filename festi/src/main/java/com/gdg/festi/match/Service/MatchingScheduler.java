@@ -16,9 +16,9 @@ public class MatchingScheduler {
 
     private final MatchingLogic matchingLogic;
 
-    private final LocalDate day1 = LocalDate.of(2025, 2, 20);
-    private final LocalDate day2 = LocalDate.of(2025, 2, 21);
-    private final LocalDate day3 = LocalDate.of(2025, 2, 22);
+    private final LocalDate day1 = LocalDate.of(2025, 5, 7);
+    private final LocalDate day2 = LocalDate.of(2025, 5, 8);
+    private final LocalDate day3 = LocalDate.of(2025, 5, 9);
 
     @Scheduled(cron = "${matchingDay1.cron}")
     public void executeMatchingDay1() {
@@ -51,12 +51,5 @@ public class MatchingScheduler {
         matchingLogic.match(day3);
 
         log.info("===== 축제 3일차 매칭 실행 완료 =====");
-    }
-
-    @Scheduled(cron = "0 0/1 * * * *") // 매 1분 0초에 실행
-    public void executeMatchingTest() {
-        log.info("===== 테스트 매칭 실행 시작 =====");
-        matchingLogic.match(LocalDate.of(2025, 2, 20)); // 테스트용 날짜 (필요시 수정)
-        log.info("===== 테스트 매칭 실행 완료 =====");
     }
 }
